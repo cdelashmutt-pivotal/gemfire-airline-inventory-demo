@@ -1,5 +1,5 @@
 # BaseLine #
-Provision and control a basic AWS Cluster.
+Provision and control a basic AWS Cluster. - DONE
 
 # Next #
 - public IP addresses

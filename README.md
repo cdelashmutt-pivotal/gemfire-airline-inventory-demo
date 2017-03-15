@@ -108,15 +108,66 @@ python3 generateCluster.py
 You now have a completely reproducible GemFire cluster on AWS.  The entire
 project can be checked in to source control to allow versioning of the cluster.
 
-# Provisioning the Cluster #
+# Scripts #
 
-provision_aws_storage.py
-   Provisions the EBS volumes for your cluster
+- __aws_provision_storage.py__
 
-destroy_aws_storage.py
+  Provisions the EBS volumes for your cluster.
+
+- __aws_destroy_storage.py__
+
    Destroys the EBS volumes for your cluster.  __This will cause data loss.__
 
+- __aws_provision.py__
 
+  Provisions the networking and EC2 instances.
+
+- __setup.py__
+
+  Installs all software and configurations onto the EC2 instances.  Note it
+  is harmless to run this script multiple times.  Updates to GemFire cluster
+  configurations will be propagated each time this is run.
+
+- __gf.py start__
+
+  Starts the GemFire cluster
+
+- __gf.py bounce__
+
+  Performs a rolling bounce of the GemFire cluster.  Care is taken  
+  that redundancy is always established before members are stopped, thus
+  ensuring no data loss.
+
+- __gf.py gfsh list members__
+
+  Runs "gfsh list members" on a member of the cluster after connecting.
+
+- __gf.py gfsh shutdown --include-locators=true__
+
+  Stops all cluster members.
+
+## Script Examples ##
+
+### First Time Provisioning and Startup ###
+```
+python3 aws_provision_storage.py
+python3 aws_provision.py
+python3 setup.py
+python3 gf.py start
+```
+
+### End of Day Tear Down (Leaves Data Intact) ###
+```
+python3 gf.py gfsh shutdown --include-locators=true
+python3 aws_destroy.py
+```
+
+### Provision and Startup After First Time ###
+```
+python3 aws_provision.py
+python3 setup.py
+python3 gf.py start
+```
 
 # The Default Plan #
 
