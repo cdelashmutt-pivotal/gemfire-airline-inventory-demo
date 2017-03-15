@@ -1,0 +1,9 @@
+<settings>
+       <servers>
+           <server>
+               <id>gemfire-release-repo</id>
+               <username>rmay@pivotal.io</username>
+               <password>hydr0g3n</password>
+           </server>
+       </servers>
+</settings>

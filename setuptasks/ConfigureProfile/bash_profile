@@ -1,0 +1,19 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:/runtime/gemfire/bin:/runtime/java/bin
+GEMFIRE=/runtime/gemfire
+JAVA_HOME=/runtime/java
+
+export PATH
+export GEMFIRE
+export JAVA_HOME
+
+echo JAVA_HOME environment variable set to $JAVA_HOME
+echo GEMFIRE environment variable set to $GEMFIRE
