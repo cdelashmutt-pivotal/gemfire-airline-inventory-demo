@@ -44,29 +44,16 @@ if __name__ == '__main__':
 
     {% endif %}
 
-    clusterScriptsURL = '{{ Servers[ServerNum].Installations[InstallationNum].ClusterScriptsURL }}'
-    clusterScriptsArchive = basename(clusterScriptsURL)
+    if not os.path.exists(clusterHome):
+      os.makedirs(clusterHome)
+
+    for script in ['cluster.py', 'gf.py', 'clusterdef.py','gemprops.py']:
+      shutil.copy(os.path.join('/tmp/setup',script),clusterHome)
+
+    print '{0} gemfire cluster control scripts installed in {1}'.format(ip, clusterHome)
+
     gemtoolsURL = '{{ Servers[ServerNum].Installations[InstallationNum].GemToolsURL }}'
     gemtoolsArchive = basename(gemtoolsURL)
-
-    if os.path.exists(clusterHome):
-        print '{0} cluster home directory already exists, skipping cluster script installation'.format(ip)
-    else:
-      if clusterScriptsURL.startswith('s3:'):
-          runQuietly('aws', 's3', 'cp', clusterScriptsURL, '/tmp/setup')
-      else:
-          runQuietly('wget', '-P', '/tmp/setup', clusterScriptsURL)
-
-      if clusterScriptsArchive.endswith('.tar.gz'):
-          runQuietly('tar', '-C', clusterParent, '-xzf', '/tmp/setup/' + clusterScriptsArchive)
-          moveFrom = os.path.join(clusterParent,clusterScriptsArchive)[:-1 * len('.tar.gz')]
-      elif clusterScriptsArchive.endswith('.zip'):
-          runQuietly('unzip', '/tmp/setup/' + clusterScriptsArchive, '-d', clusterParent)
-          moveFrom = os.path.join(clusterParent,clusterScriptsArchive)[:-1 * len('.zip')]
-
-      runQuietly('mv', moveFrom, clusterHome)
-      print '{0} gemfire cluster control scripts installed in {1}'.format(ip, clusterHome)
-
 
     if os.path.exists(os.path.join(clusterHome,'gemtools')):
         print '{0} gemfire toolkit alread found in {1} - skipping intallation'.format(ip, clusterHome)

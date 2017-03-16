@@ -58,15 +58,15 @@ def runRemoteQuietly(sshInfo, *args):
 
 def printUsage():
     print('gf.py usage                              #note: cluster.json must be in same directory')
-    print('\tpython gf.py gfsh                      #start an interactive gfsh session on a cluster member - connects automatically')
-    print('\tpython gf.py gfsh cmds...              #run a gfsh command (e.g. python gf.py gfsh list members) - connects automtically')
-    print('\tpython gf.py help                      #print this help message')
-    print('\tpython gf.py bounce                    #restart each cache server, one at a time, waiting for redundancy to be established before each stop')
-    print('\tpython gf.py start                     #start the whole cluster - idempotent - whatever is not started will be started')
-    print('\tpython gf.py stop                      #stop all cache servers (locators must be stopped explicitly) - idempotent')
-    print('\tpython gf.py start <process name>      #start a specific process')
-    print('\tpython gf.py stop <process name>       #stop a specific process (will not allow stopping a member when redundancy is not established)')
-    print('\tpython gf.py stop <process name> force #stop a member even if it would cause data loss')
+    print('\tpython3 gf.py gfsh                      #start an interactive gfsh session on a cluster member - connects automatically')
+    print('\tpython3 gf.py gfsh cmds...              #run a gfsh command (e.g. python gf.py gfsh list members) - connects automtically')
+    print('\tpython3 gf.py help                      #print this help message')
+    print('\tpython3 gf.py bounce                    #restart each cache server, one at a time, waiting for redundancy to be established before each stop')
+    print('\tpython3 gf.py start                     #start the whole cluster - idempotent - whatever is not started will be started')
+    print('\tpython3 gf.py stop                      #stop all cache servers (locators must be stopped explicitly) - idempotent')
+    print('\tpython3 gf.py start <process name>      #start a specific process')
+    print('\tpython3 gf.py stop <process name>       #stop a specific process (will not allow stopping a member when redundancy is not established)')
+    print('\tpython3 gf.py stop <process name> force #stop a member even if it would cause data loss')
 
 
 def startCluster():
@@ -88,7 +88,7 @@ def startCluster():
                     clusterScriptDir = cdef.locatorProperty(pkey,'cluster-home', host = hkey)
 
                     clusterScript = os.path.join(clusterScriptDir,'cluster.py')
-                    launch = launchRemote(host['ssh'],'python', clusterScript,'start', pkey)
+                    launch = launchRemote(host['ssh'],'python3', clusterScript,'start', pkey)
                     launches.append(launch)
 
     fails = 0
@@ -114,7 +114,7 @@ def startCluster():
                 clusterScriptDir = cdef.datanodeProperty(pkey,'cluster-home', host = hkey)
 
                 clusterScript = os.path.join(clusterScriptDir,'cluster.py')
-                launch = launchRemote(host['ssh'],'python', clusterScript,'start', 'datanodes')
+                launch = launchRemote(host['ssh'],'python3', clusterScript,'start', 'datanodes')
                 launches.append(launch)
                 break #BREAK - once you find one data node thats all you need
 
@@ -140,7 +140,7 @@ def startCluster():
                 clusterScriptDir = cdef.datanodeProperty(pkey,'cluster-home', host = hkey)
 
                 clusterScript = os.path.join(clusterScriptDir,'cluster.py')
-                launch = launchRemote(host['ssh'],'python', clusterScript,'start', 'accessors')
+                launch = launchRemote(host['ssh'],'python3', clusterScript,'start', 'accessors')
                 launches.append(launch)
                 break #BREAK - once you find one accessor thats all you need
 
@@ -181,7 +181,7 @@ def runClusterScriptOnAnyHost(*args):
                 # all of that was just to get the location of the remote script
                 try :
                     print('executing python {0} {1}  on {2}'.format(clusterScript, ' '.join(args),hkey))
-                    runRemoteList(host['ssh'], [clusterScript] + list(args) )
+                    runRemoteList(host['ssh'], ['python3', clusterScript] + list(args) )
                     success = True
                 except Exception as x:
                     print('failed: {0}'.format(x))
@@ -215,7 +215,7 @@ def runClusterScriptOnMemberHost(mname, *args):
     clusterScript = os.path.join(clusterScriptDir,'cluster.py')
 
     print('executing python {0} {1} on {2}'.format(clusterScript, ' '.join(args),targetHost['ssh']['host']))
-    runRemoteList(targetHost['ssh'], [clusterScript] + list(args))
+    runRemoteList(targetHost['ssh'], ['python3',clusterScript] + list(args))
 
 def redundancyEstablished(wait = 0):
     # uses the clusterDef and cdef variables from global scope
@@ -446,6 +446,8 @@ def bounce():
     print('all datanodes bounced')
 
 if __name__ == '__main__':
+    assert sys.version_info >= (3,0)
+
     here = os.path.dirname(sys.argv[0])
     clusterDefFile = os.path.join(here, 'setuptasks','InstallGemFireCluster','cluster.json')
     if not os.path.isfile(clusterDefFile):

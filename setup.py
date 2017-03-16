@@ -6,6 +6,7 @@ import jinja2
 import json
 import os
 import os.path
+import shutil
 import subprocess
 import sys
 import threading
@@ -103,6 +104,23 @@ if __name__ == '__main__':
             context['ServerNum'] = serverNum
             context['InstallationNum'] = installationNum
             installationDir = os.path.join(setupTasksDir,installation['Name'])
+
+            # copy the additonal files into the installation dir
+            if 'AdditionalFiles' in installation:
+                for addFile in installation['AdditionalFiles']:
+                    source = os.path.join(here,addFile)
+                    if os.path.isfile(source):
+                        shutil.copy(source, installationDir)
+                    elif os.path.isdir(source):
+                        destDir = os.path.join(installationDir,os.path.basename(source))
+                        if (os.path.exists(destDir)):
+                            shutil.rmtree(destDir)
+
+                        shutil.copytree(source, destDir)
+                    else:
+                        print('Additional file "{0}" not found. Continuing.'.format(addFile))
+
+
             renderTemplatesInDir(context, installationDir)
 
             runQuietly('rsync', '-avz','--delete',

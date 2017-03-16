@@ -2,14 +2,15 @@
 Provision and control a basic AWS Cluster. - DONE
 
 # Next #
-- public IP addresses
-- pull GemFire from the sampe place as "brew install"
-- automatic creation of key for each environment
+- install gemfire-manager scripts from this project (will need python3)  - DONE
 - move gemfire-toolkit into ops-suite
-- initial pdx config preferences
-- ability to specify volume sizes on AWS
-- cost estimate
+- pull GemFire from the sampe place as "brew install" - DONE
+- public IP addresses
 - ability to specify a schedule for the cluster
+- basic monitoring and alerting (monit for v1 ?)
+- automatic creation of key for each environment
+- initial pdx config preferences
+- cost estimate
 - pull commonalities between aws_provision and aws_provision_storage into
 common file
 

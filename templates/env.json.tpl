@@ -51,11 +51,12 @@
                 },
                 {
                     "Name": "YumInstallPackages",
-                    "Packages": ["gcc", "python-devel","python-pip"]
+                    "Packages": ["gcc", "python35","python35-devel","python35-pip"]
                 },
                 {
                     "Name": "PipInstallPackages",
-                    "Packages": ["netifaces"]
+                    "Packages": ["netifaces"],
+                    "PipProgramName" : "pip-3.5"
                 },
                 {
                     "Name": "MountStorage"
@@ -72,12 +73,12 @@
                         },
                         {
                             "Name" : "GemFire 9.0.1",
-                            "ArchiveURL" : "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/pivotal-gemfire-9.0.1.tar.gz",
+                            "ArchiveURL" : "http://download.pivotal.com.s3.amazonaws.com/gemfire/9.0.1/pivotal-gemfire-9.0.1.zip",
                             "RootDir" : "pivotal-gemfire-9.0.1",
                             "UnpackInDir" : "/runtime",
                             "LinkName" : "gemfire"
                         }
-                        {% if Server.Type == "ETL" %}
+                        {% if  "ETL" in Server.Roles %}
                         , {
                             "Name" : "Apache Maven 3.3.9",
                             "ArchiveURL" : "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/apache-maven-3.3.9-bin.tar.gz",
@@ -95,9 +96,9 @@
                 {% if  "DataNode" in Server.Roles %}
                 , {
                     "Name" : "InstallGemFireCluster",
-                    "ClusterScriptsURL": "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/gemfire-manager-1.6.zip",
                     "GemToolsURL": "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/gemfire-toolkit-2.1-runtime.tar.gz",
-                    "ClusterHome" : "/runtime/gem_cluster_1"
+                    "ClusterHome" : "/runtime/gem_cluster_1",
+                    "AdditionalFiles" : ["cluster.py","clusterdef.py","gemprops.py", "gf.py"]
                 }
                 {% endif %}
                 {% if "ETL" in Server.Roles %}

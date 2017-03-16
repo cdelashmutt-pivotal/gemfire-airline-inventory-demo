@@ -13,8 +13,8 @@ if __name__ == '__main__':
    target = sys.argv[1]
 
    here = os.path.dirname(os.path.abspath(sys.argv[0]))
-   runtimeFile = os.path.join(here, 'runtime.json')
-   envFile = os.path.join(here, 'env.json')
+   runtimeFile = os.path.join(here, 'aws_runtime.json')
+   envFile = os.path.join(here,'config', 'env.json')
    
    if not os.path.exists(runtimeFile):
       sys.exit('required file "{0}" not found'.format(runtimeFile))
