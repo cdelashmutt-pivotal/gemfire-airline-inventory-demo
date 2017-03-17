@@ -1,0 +1,339 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "VPC" : {
+       "Type" : "AWS::EC2::VPC",
+       "Properties" : {
+          "CidrBlock" : "192.168.0.0/16",
+          "Tags" : [
+            {
+              "Key": "Name",
+              "Value": "TestVPC"
+            }
+          ]
+       }
+    },
+    "SubnetA" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1a",
+         "CidrBlock" : "192.168.1.0/24",
+         "MapPublicIpOnLaunch" : true,
+          "Tags" : [
+            {
+              "Key": "Name",
+              "Value": "TestSubnetA"
+            }
+          ],
+         "VpcId" : { "Ref" : "VPC" }
+      }
+    },
+    "SubnetB" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1b",
+         "CidrBlock" : "192.168.2.0/24",
+         "MapPublicIpOnLaunch" : true,
+          "Tags" : [
+            {
+              "Key": "Name",
+              "Value": "TestSubnetB"
+            }
+          ],
+         "VpcId" : { "Ref" : "VPC" }
+      }
+    },
+    "SubnetC" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1c",
+         "CidrBlock" : "192.168.3.0/24",
+         "MapPublicIpOnLaunch" : true,
+          "Tags" : [
+            {
+              "Key": "Name",
+              "Value": "TestSubnetC"
+            }
+          ],
+         "VpcId" : { "Ref" : "VPC" }
+      }
+    },
+    "InternetGateway":{
+      "Type" : "AWS::EC2::InternetGateway",
+      "Properties" : {
+        "Tags" : [
+          {
+            "Key": "Name",
+            "Value": "TestInternetGateway"
+          }
+        ]
+      }
+    },
+    "RouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : {"Ref": "VPC"},
+        "Tags" : [
+          {
+            "Key": "Name",
+            "Value" : "TestRouteTable"
+          }
+        ]
+      }
+    },
+    "RouteToInternet" : {
+      "Type" : "AWS::EC2::Route",
+      "Properties" : {
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "GatewayId" : {"Ref": "InternetGateway"},
+        "RouteTableId" : {"Ref":  "RouteTable"}
+      },
+      "DependsOn": ["VPCGatewayAttachment"]
+    },
+    "SubnetARouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+         "RouteTableId" : {"Ref" : "RouteTable"},
+         "SubnetId" : {"Ref" : "SubnetA"}
+      }
+    },
+    "SubnetBRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+         "RouteTableId" : {"Ref" : "RouteTable"},
+         "SubnetId" : {"Ref" : "SubnetB"}
+      }
+    },
+    "SubnetCRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+         "RouteTableId" : {"Ref" : "RouteTable"},
+         "SubnetId" : {"Ref" : "SubnetC"}
+      }
+    },
+    "VPCGatewayAttachment":{
+      "Type" : "AWS::EC2::VPCGatewayAttachment",
+      "Properties" : {
+         "InternetGatewayId" : {"Ref" : "InternetGateway"  },
+         "VpcId" : {"Ref" : "VPC"}
+      }
+    },
+    "SecurityGroup":{
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+         "GroupDescription" : "TestSecurityGroup",
+         "VpcId" : {"Ref" : "VPC"},
+         "SecurityGroupIngress" : [
+            {
+              "IpProtocol" : "-1",
+               "CidrIp" : { "Fn::GetAtt": ["VPC","CidrBlock"]}
+            },
+            {
+              "IpProtocol" : "tcp",
+               "FromPort" : "22",
+               "ToPort" : "22",
+               "CidrIp" : "0.0.0.0/0"
+            },
+            {
+              "IpProtocol" : "tcp",
+               "FromPort" : "10000",
+               "ToPort" : "19999",
+               "CidrIp" : "0.0.0.0/0"
+            }
+          ],
+          "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestSecurityGroup"
+            }
+          ]
+      }
+
+    },
+    "gem1101" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1a",
+         "EbsOptimized" : true,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "m4.2xlarge",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.1.101",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetA" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestServergem1101"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "Test"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-026f7bb9000817cb3"
+          }
+,          {
+            "Device" : "/dev/xvdg",
+            "VolumeId" : "vol-0ccd95dbc52adfbda"
+          }
+,          {
+            "Device" : "/dev/xvdh",
+            "VolumeId" : "vol-07a946704838bd0e0"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+,     "gem2101" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1b",
+         "EbsOptimized" : true,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "m4.2xlarge",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.2.101",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetB" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestServergem2101"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "Test"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-026e8a59f0bb66f74"
+          }
+,          {
+            "Device" : "/dev/xvdg",
+            "VolumeId" : "vol-06daec709ea11fc9f"
+          }
+,          {
+            "Device" : "/dev/xvdh",
+            "VolumeId" : "vol-0549cc93ed0e9dc0d"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+,     "gem3101" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1c",
+         "EbsOptimized" : true,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "m4.2xlarge",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.3.101",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetC" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestServergem3101"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "Test"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-0a88a409e7e11c78e"
+          }
+,          {
+            "Device" : "/dev/xvdg",
+            "VolumeId" : "vol-064202949e51c81b2"
+          }
+,          {
+            "Device" : "/dev/xvdh",
+            "VolumeId" : "vol-008e02f309bb9416a"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+,     "etl2201" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1b",
+         "EbsOptimized" : true,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "m4.2xlarge",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.2.201",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetB" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestServeretl2201"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "Test"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-0a8ed4c277323fcb3"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+,     "web2201" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1b",
+         "EbsOptimized" : true,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "m4.2xlarge",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.2.202",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetB" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "TestServerweb2201"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "Test"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-06ff5522cb94ba3a6"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+  },
+  "Description": "Test Stack"
+}

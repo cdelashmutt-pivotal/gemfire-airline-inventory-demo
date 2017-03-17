@@ -78,7 +78,7 @@
                             "UnpackInDir" : "/runtime",
                             "LinkName" : "gemfire"
                         }
-                        {% if  "ETL" in Server.Roles %}
+                        {% if  "ETL" in Server.Roles or "WEB" in Server.Roles %}
                         , {
                             "Name" : "Apache Maven 3.3.9",
                             "ArchiveURL" : "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/apache-maven-3.3.9-bin.tar.gz",
@@ -105,12 +105,12 @@
                 ,{
                   "Name" : "ConfigureMaven",
                   "Owner" : "ec2-user"
-                }
-                , {
-                    "Name" : "people-loader",
-                    "TargetDir" : "/runtime/people-loader",
-                    "Owner" : "ec2-user"
-                }
+                }, {
+                  "Name" : "MavenUploadAndBuild",
+                  "AdditionalFiles" : ["code"],
+                  "TargetDir" : "/runtime/gemfire-airline-inventory-demo",
+                  "Owner" : "ec2-user"
+               }
                 {% endif %}
             ]
         } {%- if not loop.last %},{% endif %}
