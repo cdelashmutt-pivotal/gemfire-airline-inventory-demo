@@ -1,0 +1,8 @@
+ATL,US/Eastern
+DCA,US/Eastern
+DEN,US/Mountain
+JAX,US/Eastern
+LAX,US/Pacific
+LGA,US/Eastern
+SFO,US/Pacific
+

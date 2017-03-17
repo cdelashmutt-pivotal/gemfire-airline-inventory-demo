@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:gfe="http://www.springframework.org/schema/gemfire"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire-2.0.xsd">
+
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer" />
+	
+	<gfe:client-cache id="cache" pdx-read-serialized="false"
+		pool-name="pool" pdx-serializer-ref="pdxSerializer" />
+
+	<gfe:pool id="pool" read-timeout="10000">
+		<gfe:locator host="${locator.host}" port="${locator.port}" />
+	</gfe:pool>
+
+
+	<gfe:client-region id="airportRegion" name="Airport" 
+		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
+
+	<gfe:client-region id="fareRegion" name="Fare" 
+		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
+
+	<gfe:client-region id="flightRegion" name="Flight" 
+		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
+
+	<gfe:client-region id="flightAvailabilityRegion" name="FlightAvailability" 
+		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
+		
+	<gfe:client-region id="revenueControlRegion" name="RevenueControl" 
+		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
+		
+	<bean id="pdxSerializer" class="org.apache.geode.pdx.ReflectionBasedAutoSerializer">
+		<constructor-arg>
+			<util:list value-type="java.lang.String">
+				<value>io.pivotal.pde.sample.airline.domain.*</value>
+			</util:list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="loaderConfig" class="io.pivotal.pde.sample.airline.loader.LoaderConfig">
+		<property name="daysToLoad" value="365" />
+	</bean>
+
+</beans>

@@ -1,0 +1,8 @@
+create region --name=Flight --type=PARTITION_REDUNDANT_PERSISTENT_OVERFLOW --disk-store=flightDiskStore --redundant-copies=3 --recovery-delay=0 --startup-recovery-delay=-1
+create region --name=RevenueControl --type=PARTITION_REDUNDANT_PERSISTENT_OVERFLOW --disk-store=revenueControlDiskStore --redundant-copies=3 --recovery-delay=0 --startup-recovery-delay=-1 --colocated-with=/Flight
+create region --name=FlightAvailability --type=PARTITION_REDUNDANT_PERSISTENT_OVERFLOW --disk-store=flightAvailabilityDiskStore --redundant-copies=3 --recovery-delay=0 --startup-recovery-delay=-1 --colocated-with=/Flight
+create region --name=Fare --type=REPLICATE_PERSISTENT_OVERFLOW --disk-store=fareDiskStore
+create region --name=Airport --type=REPLICATE_PERSISTENT_OVERFLOW --disk-store=airportDiskStore
+
+list regions
+

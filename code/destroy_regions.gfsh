@@ -1,0 +1,8 @@
+destroy region --name=Airport
+destroy region --name=Fare
+destroy region --name=FlightAvailability
+destroy region --name=RevenueControl
+destroy region --name=Flight
+
+list regions
+

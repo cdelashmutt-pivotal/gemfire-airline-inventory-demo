@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gfe="http://www.springframework.org/schema/gemfire"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+		<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer" />
+
+		<gfe:client-cache id="cache" pdx-read-serialized="false"
+			pool-name="pool" pdx-serializer-ref="pdxSerializer"  copy-on-read="false"/>
+	
+		<gfe:pool id="pool" read-timeout="300000" subscription-enabled="true" >
+			<gfe:locator host="${locator.host}" port="${locator.port}" />
+		</gfe:pool>
+
+
+		<gfe:client-region id="flightRegion" name="Flight"
+			cache-ref="cache" pool-name="pool" shortcut="CACHING_PROXY" />
+		
+
+		<bean id="pdxSerializer" class="org.apache.geode.pdx.ReflectionBasedAutoSerializer">
+			<constructor-arg>
+				<util:list value-type="java.lang.String">
+					<value>io.pivotal.pde.sample.airline.domain.*</value>
+				</util:list>
+			</constructor-arg>
+		</bean>
+	
+	<bean id="loadGenerator" class="io.pivotal.pde.sample.airline.loadgen.LoadGen" init-method="init" >
+		<property name="test">
+			<bean id="test" class="io.pivotal.pde.sample.airline.loadgen.AvailBookTest" init-method="init" depends-on="flightRegion">
+				<property name="lookBookRatio" value="${loadgen.looktobook}"/>
+			</bean>
+		</property>
+		<property name="dataGenerator">
+			<bean id="dataGenerator" class="io.pivotal.pde.sample.airline.loadgen.SimpleRandomGenerator" init-method="init">
+				<property name="flightRegion" ref="flightRegion"/>
+				<property name="fromDate" value="${loadgen.fromdate}"/>
+				<property name="toDate" value="${loadgen.todate}"/>
+			</bean>
+		</property>
+		<property name="threadCount" value="${loadgen.threads}"/>
+		<property name="executionIntervalMs" value="${loadgen.executeintervalms}"/>
+	</bean>
+	
+	
+</beans>

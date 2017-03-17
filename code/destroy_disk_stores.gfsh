@@ -1,0 +1,9 @@
+destroy disk-store --name=pdxDiskStore
+destroy disk-store --name=revenueControlDiskStore
+destroy disk-store --name=flightDiskStore
+destroy disk-store --name=flightAvailabilityDiskStore
+destroy disk-store --name=fareDiskStore
+destroy disk-store --name=airportDiskStore
+
+list disk-stores
+
