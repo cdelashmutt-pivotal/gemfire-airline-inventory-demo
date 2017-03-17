@@ -11,6 +11,7 @@ import subprocess
 import sys
 import threading
 import time
+import tempfile
 
 #args should be a list
 def runListQuietly(args):
@@ -106,26 +107,38 @@ if __name__ == '__main__':
             installationDir = os.path.join(setupTasksDir,installation['Name'])
 
             # copy the additonal files into the installation dir
+            additionalsDir = None
             if 'AdditionalFiles' in installation:
+                additionalsDir = tempfile.mkdtemp()
                 for addFile in installation['AdditionalFiles']:
                     source = os.path.join(here,addFile)
                     if os.path.isfile(source):
-                        shutil.copy(source, installationDir)
+                        shutil.copy(source, additionalsDir)
                     elif os.path.isdir(source):
-                        destDir = os.path.join(installationDir,os.path.basename(source))
-                        if (os.path.exists(destDir)):
-                            shutil.rmtree(destDir)
+                        # put the CONTENTS of the named dir into the tempDir
+                        for thing in os.listdir(source):
+                            thingpath = os.path.join(source, thing)
+                            if os.path.isfile(thingpath):
+                                shutil.copy(thingpath,additionalsDir)
+                            else:
+                                shutil.copytree(thingpath, os.path.join(additionalsDir,thing))
 
-                        shutil.copytree(source, destDir)
                     else:
                         print('Additional file "{0}" not found. Continuing.'.format(addFile))
-
 
             renderTemplatesInDir(context, installationDir)
 
             runQuietly('rsync', '-avz','--delete',
                 '-e' ,'ssh -o StrictHostKeyChecking=no -i {0}'.format(context['SSHKeyPath']),
                 installationDir + '/', server['SSHUser'] + '@' + ip + ':/tmp/setup')
+
+            if additionalsDir is not None:
+                runQuietly('rsync', '-avz',
+                    '-e' ,'ssh -o StrictHostKeyChecking=no -i {0}'.format(context['SSHKeyPath']),
+                    additionalsDir + '/', server['SSHUser'] + '@' + ip + ':/tmp/setup')
+
+                shutil.rmtree(additionalsDir)
+
 
             runRemote(context['SSHKeyPath'], server['SSHUser'], ip,
                       'sudo', 'python','/tmp/setup/setup.py')
