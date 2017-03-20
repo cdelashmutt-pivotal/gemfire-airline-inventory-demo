@@ -36,8 +36,7 @@
         "enable-network-partition-detection" : "true"
     },
     "hosts": {
-    {% for Server in Servers  %}
-    {% for Installation in Server.Installations if Installation.Name == 'InstallGemFireCluster' %}
+    {% for Server in Servers  if "Datanode" in Server.Roles or "Locator" in Server.Roles %}
         "ip-{{ Server.PrivateIP | replace('.','-') }}" : {
             "host-properties" :  {
              },
@@ -46,6 +45,7 @@
                 "{{ Server.Name }}-locator" : {
                     "type" : "locator",
                     "bind-address" : "{{ Server.PrivateIP }}",
+                    "hostname-for-clients" : "{{ Server.PublicIpAddress }}",
                     "jmx-manager-start" : "true"
                  },
                {% endif %}
@@ -64,11 +64,7 @@
                 "user" : "{{ Server.SSHUser }}",
                 "key-file" : "{{ SSHKeyPath }}"
              }
-        },
+        } {% if not loop.last -%},{%- endif %}
     {% endfor %}
-    {% endfor %}
-        "dummy" : {
-            "processes": []
-        }
    }
 }
