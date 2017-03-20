@@ -158,7 +158,11 @@
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
          "AvailabilityZone" : "{{ RegionName }}{{ Server.AZ | lower }}",
+         {% if Server.InstanceType.startswith('m4') %}
          "EbsOptimized" : true,
+         {% else%}
+         "EbsOptimized" : false,
+         {% endif %}
          "ImageId" : "{{ Server.ImageId }}",
          "InstanceInitiatedShutdownBehavior" : "stop",
          "InstanceType" : "{{ Server.InstanceType }}",
