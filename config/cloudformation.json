@@ -8,7 +8,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "TestVPC"
+              "Value": "AirlineDemoVPC"
             }
           ]
        }
@@ -22,7 +22,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "TestSubnetA"
+              "Value": "AirlineDemoSubnetA"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -37,7 +37,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "TestSubnetB"
+              "Value": "AirlineDemoSubnetB"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -52,7 +52,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "TestSubnetC"
+              "Value": "AirlineDemoSubnetC"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -64,7 +64,7 @@
         "Tags" : [
           {
             "Key": "Name",
-            "Value": "TestInternetGateway"
+            "Value": "AirlineDemoInternetGateway"
           }
         ]
       }
@@ -76,7 +76,7 @@
         "Tags" : [
           {
             "Key": "Name",
-            "Value" : "TestRouteTable"
+            "Value" : "AirlineDemoRouteTable"
           }
         ]
       }
@@ -121,7 +121,7 @@
     "SecurityGroup":{
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
-         "GroupDescription" : "TestSecurityGroup",
+         "GroupDescription" : "AirlineDemoSecurityGroup",
          "VpcId" : {"Ref" : "VPC"},
          "SecurityGroupIngress" : [
             {
@@ -144,7 +144,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestSecurityGroup"
+              "Value" : "AirlineDemoSecurityGroup"
             }
           ]
       }
@@ -165,25 +165,25 @@
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestServergem1101"
+              "Value" : "AirlineDemoServergem1101"
             },
             {
               "Key": "Environment",
-              "Value" : "Test"
+              "Value" : "AirlineDemo"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-026f7bb9000817cb3"
+            "VolumeId" : "vol-08084d1918d445ec3"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-0ccd95dbc52adfbda"
+            "VolumeId" : "vol-05b0b86ceb32624f9"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-07a946704838bd0e0"
+            "VolumeId" : "vol-04eabc8016be29e76"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -205,25 +205,25 @@
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestServergem2101"
+              "Value" : "AirlineDemoServergem2101"
             },
             {
               "Key": "Environment",
-              "Value" : "Test"
+              "Value" : "AirlineDemo"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-026e8a59f0bb66f74"
+            "VolumeId" : "vol-07b3d5b50925457d9"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-06daec709ea11fc9f"
+            "VolumeId" : "vol-0ff52e2122fec836a"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-0549cc93ed0e9dc0d"
+            "VolumeId" : "vol-0378d2be1a2eff041"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -245,25 +245,25 @@
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestServergem3101"
+              "Value" : "AirlineDemoServergem3101"
             },
             {
               "Key": "Environment",
-              "Value" : "Test"
+              "Value" : "AirlineDemo"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-0a88a409e7e11c78e"
+            "VolumeId" : "vol-0846e56d94842404b"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-064202949e51c81b2"
+            "VolumeId" : "vol-06a05d1607b7bb2f7"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-008e02f309bb9416a"
+            "VolumeId" : "vol-0152bc703825f62a2"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -285,17 +285,17 @@
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestServeretl2201"
+              "Value" : "AirlineDemoServeretl2201"
             },
             {
               "Key": "Environment",
-              "Value" : "Test"
+              "Value" : "AirlineDemo"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-0a8ed4c277323fcb3"
+            "VolumeId" : "vol-091ac1e1f0b5a9791"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -317,17 +317,49 @@
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "TestServerweb2201"
+              "Value" : "AirlineDemoServerweb2201"
             },
             {
               "Key": "Environment",
-              "Value" : "Test"
+              "Value" : "AirlineDemo"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-06ff5522cb94ba3a6"
+            "VolumeId" : "vol-0d6ec4c78d61b0807"
+          }
+         ] ,
+         "BlockDeviceMappings" : [
+         ]
+      }
+    }
+,     "controller" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+         "AvailabilityZone" : "us-east-1a",
+         "EbsOptimized" : false,
+         "ImageId" : "ami-0b33d91d",
+         "InstanceInitiatedShutdownBehavior" : "stop",
+         "InstanceType" : "t2.micro",
+         "KeyName" : "lab-keypair",
+         "PrivateIpAddress" : "192.168.1.222",
+         "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
+         "SubnetId" : { "Ref" : "SubnetA" },
+         "Tags" : [
+            {
+              "Key": "Name",
+              "Value" : "AirlineDemoServercontroller"
+            },
+            {
+              "Key": "Environment",
+              "Value" : "AirlineDemo"
+            }
+          ],
+         "Volumes" : [
+          {
+            "Device" : "/dev/xvdf",
+            "VolumeId" : "vol-08ae92b9134c3abd3"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -335,5 +367,5 @@
       }
     }
   },
-  "Description": "Test Stack"
+  "Description": "AirlineDemo Stack"
 }

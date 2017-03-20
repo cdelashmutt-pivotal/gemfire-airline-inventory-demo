@@ -10,11 +10,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem1101-1"
+            "Value" : "AirlineDemoEBSVol-gem1101-1"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -36,11 +36,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem1101-2"
+            "Value" : "AirlineDemoEBSVol-gem1101-2"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -62,11 +62,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem1101-3"
+            "Value" : "AirlineDemoEBSVol-gem1101-3"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -88,11 +88,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem2101-1"
+            "Value" : "AirlineDemoEBSVol-gem2101-1"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -114,11 +114,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem2101-2"
+            "Value" : "AirlineDemoEBSVol-gem2101-2"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -140,11 +140,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem2101-3"
+            "Value" : "AirlineDemoEBSVol-gem2101-3"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -166,11 +166,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem3101-1"
+            "Value" : "AirlineDemoEBSVol-gem3101-1"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -192,11 +192,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem3101-2"
+            "Value" : "AirlineDemoEBSVol-gem3101-2"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -218,11 +218,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-gem3101-3"
+            "Value" : "AirlineDemoEBSVol-gem3101-3"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -244,11 +244,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-etl2201-1"
+            "Value" : "AirlineDemoEBSVol-etl2201-1"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -270,11 +270,11 @@
         "Tags" : [
           {
             "Key":"Name",
-            "Value" : "TestEBSVol-web2201-1"
+            "Value" : "AirlineDemoEBSVol-web2201-1"
           },
           {
             "Key":"Environment",
-            "Value" : "Test"
+            "Value" : "AirlineDemo"
           },
           {
             "Key":"ServerName",
@@ -287,6 +287,32 @@
         ]
       }
     }
+,     "EBSVolcontroller1" : {
+      "Type":"AWS::EC2::Volume",
+      "Properties" : {
+        "AvailabilityZone" : "us-east-1a",
+        "Size" : 10,
+        "VolumeType" : "gp2",
+        "Tags" : [
+          {
+            "Key":"Name",
+            "Value" : "AirlineDemoEBSVol-controller-1"
+          },
+          {
+            "Key":"Environment",
+            "Value" : "AirlineDemo"
+          },
+          {
+            "Key":"ServerName",
+            "Value" : "controller"
+          },
+          {
+            "Key":"Device",
+            "Value" : "/dev/xvdf"
+          }
+        ]
+      }
+    }
   },
-  "Description": "Test Storage Stack"
+  "Description": "AirlineDemo Storage Stack"
 }

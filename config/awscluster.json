@@ -1,5 +1,5 @@
 {
-  "EnvironmentName" : "Test",
+  "EnvironmentName" : "AirlineDemo",
   "RegionName" : "us-east-1",
   "SSHKeyPairName" : "lab-keypair",
   "SSHKeyPath": "/Users/rmay/Downloads/lab-keypair.pem",
@@ -8,35 +8,35 @@
       "Name" : "gem1101",
         "PrivateIP" : "192.168.1.101",
         "AZ" : "A",
-        "InstanceType" : "m4.2xlarge",
+        "InstanceType" : "m4.large",
         "Roles" : ["DataNode", "Locator"]
     },
     {
       "Name" : "gem2101",
       "PrivateIP" : "192.168.2.101",
       "AZ" : "B",
-      "InstanceType" : "m4.2xlarge",
+      "InstanceType" : "m4.large",
       "Roles" : ["DataNode", "Locator"]
     },
     {
       "Name" : "gem3101",
       "PrivateIP" : "192.168.3.101",
       "AZ" : "C",
-      "InstanceType" : "m4.2xlarge",
+      "InstanceType" : "m4.large",
       "Roles" : ["DataNode", "Locator"]
     },
     {
       "Name" : "etl2201",
       "PrivateIP" : "192.168.2.201",
       "AZ" : "B",
-      "InstanceType" : "m4.2xlarge",
+      "InstanceType" : "m4.large",
       "Roles" : ["ETL"]
     },
     {
       "Name" : "web2201",
       "PrivateIP" : "192.168.2.202",
       "AZ" : "B",
-      "InstanceType" : "m4.2xlarge",
+      "InstanceType" : "m4.large",
       "Roles" : ["WEB"]
     }
   ]
