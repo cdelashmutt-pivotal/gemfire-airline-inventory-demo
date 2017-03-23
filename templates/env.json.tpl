@@ -97,9 +97,8 @@
                 {% if  "DataNode" in Server.Roles %}
                 , {
                     "Name" : "InstallGemFireCluster",
-                    "GemToolsURL": "https://s3-us-west-2.amazonaws.com/rmay.pivotal.io.software/gemfire-toolkit-2.1-runtime.tar.gz",
                     "ClusterHome" : "/runtime/gem_cluster_1",
-                    "AdditionalFiles" : ["cluster.py","clusterdef.py","gemprops.py", "gf.py"]
+                    "AdditionalFiles" : ["cluster.py","clusterdef.py","gemprops.py", "gf.py", "gemfire-toolkit/target/gemfire-toolkit-N-runtime.tar.gz"]
                 }
                 {% endif %}
                 {% if "ETL" in Server.Roles %}
@@ -156,6 +155,11 @@
                             "LinkName" : "gemfire"
                         }
                     ]
+                },
+                {
+                    "Name" : "InstallGemFireCluster",
+                    "ClusterHome" : "/runtime/gem_cluster_1",
+                    "AdditionalFiles" : ["cluster.py","clusterdef.py","gemprops.py", "gf.py", "gemfire-toolkit/target/gemfire-toolkit-N-runtime.tar.gz"]
                 },
                 {
                     "Name" : "ConfigureProfile",

@@ -52,23 +52,32 @@ if __name__ == '__main__':
 
     print '{0} gemfire cluster control scripts installed in {1}'.format(ip, clusterHome)
 
+    if os.path.exists(os.path.join(clusterHome,'gemtools')):
+        shutil.rmtree(os.path.join(clusterHome,'gemtools'))
+        print '{0} removing and reinstalling gemfire toolkit'.format(ip)
+
+    {% if Servers[ServerNum].Installations[InstallationNum].GemToolsURL %}
     gemtoolsURL = '{{ Servers[ServerNum].Installations[InstallationNum].GemToolsURL }}'
     gemtoolsArchive = basename(gemtoolsURL)
 
-    if os.path.exists(os.path.join(clusterHome,'gemtools')):
-        print '{0} gemfire toolkit alread found in {1} - skipping intallation'.format(ip, clusterHome)
+    if gemtoolsURL.startswith('s3:'):
+        runQuietly('aws', 's3', 'cp', gemtoolsURL, '/tmp/setup')
     else:
-      if gemtoolsURL.startswith('s3:'):
-          runQuietly('aws', 's3', 'cp', gemtoolsURL, '/tmp/setup')
-      else:
-          runQuietly('wget', '-P', '/tmp/setup', gemtoolsURL)
+        runQuietly('wget', '-P', '/tmp/setup', gemtoolsURL)
 
-      if gemtoolsArchive.endswith('.tar.gz'):
-          runQuietly('tar', '-C', clusterHome, '-xzf', '/tmp/setup/' + gemtoolsArchive)
-      elif gemtoolsArchive.endswith('.zip'):
-          runQuietly('unzip', '/tmp/setup/' + gemtoolsArchive, '-d', clusterHome)
+    if gemtoolsArchive.endswith('.tar.gz'):
+        runQuietly('tar', '-C', clusterHome, '-xzf', '/tmp/setup/' + gemtoolsArchive)
+    elif gemtoolsArchive.endswith('.zip'):
+        runQuietly('unzip', '/tmp/setup/' + gemtoolsArchive, '-d', clusterHome)
 
+    print '{0} gemfire toolkit installed in {1}'.format(ip, os.path.join(clusterHome,'gemtools'))
+    {% else %}
+    gemtoolsArchive = '/tmp/setup/gemfire-toolkit-N-runtime.tar.gz'
+    if os.path.exists(gemtoolsArchive):
+      runQuietly('tar', '-C', clusterHome, '-xzf', gemtoolsArchive)
       print '{0} gemfire toolkit installed in {1}'.format(ip, os.path.join(clusterHome,'gemtools'))
+    {% endif %}
+
 
     shutil.copy('/tmp/setup/cluster.json', clusterHome)
     if os.path.exists('/tmp/setup/config'):
