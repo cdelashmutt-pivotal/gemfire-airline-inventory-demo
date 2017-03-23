@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     # if the parent dir doesn't exist, create it and change the owner
     if not os.path.exists(parentDir):
-      shutil.makedirs(parentDir)
+      os.makedirs(parentDir)
       runQuietly('chown', '{0}:{0}'.format('{{ Servers[ServerNum].SSHUser }}'), parentDir)
 
 
