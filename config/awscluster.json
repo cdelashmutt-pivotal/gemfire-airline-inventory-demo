@@ -1,8 +1,8 @@
 {
-  "EnvironmentName" : "AirlineDemo",
+  "EnvironmentName" : "AirlineDemo2",
   "RegionName" : "us-east-1",
-  "SSHKeyPairName" : "lab-keypair",
-  "SSHKeyPath": "/Users/rmay/Downloads/lab-keypair.pem",
+  "SSHKeyPairName" : "yak-keypair",
+  "SSHKeyPath": "/Users/rmay/Downloads/yak-keypair.pem",
   "Servers" : [
     {
       "Name" : "gem1101",

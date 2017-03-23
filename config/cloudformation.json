@@ -8,7 +8,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "AirlineDemoVPC"
+              "Value": "AirlineDemo2VPC"
             }
           ]
        }
@@ -22,7 +22,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "AirlineDemoSubnetA"
+              "Value": "AirlineDemo2SubnetA"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -37,7 +37,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "AirlineDemoSubnetB"
+              "Value": "AirlineDemo2SubnetB"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -52,7 +52,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value": "AirlineDemoSubnetC"
+              "Value": "AirlineDemo2SubnetC"
             }
           ],
          "VpcId" : { "Ref" : "VPC" }
@@ -64,7 +64,7 @@
         "Tags" : [
           {
             "Key": "Name",
-            "Value": "AirlineDemoInternetGateway"
+            "Value": "AirlineDemo2InternetGateway"
           }
         ]
       }
@@ -76,7 +76,7 @@
         "Tags" : [
           {
             "Key": "Name",
-            "Value" : "AirlineDemoRouteTable"
+            "Value" : "AirlineDemo2RouteTable"
           }
         ]
       }
@@ -121,7 +121,7 @@
     "SecurityGroup":{
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
-         "GroupDescription" : "AirlineDemoSecurityGroup",
+         "GroupDescription" : "AirlineDemo2SecurityGroup",
          "VpcId" : {"Ref" : "VPC"},
          "SecurityGroupIngress" : [
             {
@@ -144,7 +144,7 @@
           "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoSecurityGroup"
+              "Value" : "AirlineDemo2SecurityGroup"
             }
           ]
       }
@@ -157,33 +157,33 @@
          "EbsOptimized" : true,
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
-         "InstanceType" : "m4.2xlarge",
-         "KeyName" : "lab-keypair",
+         "InstanceType" : "m4.large",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.1.101",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetA" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServergem1101"
+              "Value" : "AirlineDemo2Servergem1101"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-08084d1918d445ec3"
+            "VolumeId" : "vol-07c47bf39c036ef23"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-05b0b86ceb32624f9"
+            "VolumeId" : "vol-01f5e958eba409735"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-04eabc8016be29e76"
+            "VolumeId" : "vol-0dd14037fc81b7bc7"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -197,33 +197,33 @@
          "EbsOptimized" : true,
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
-         "InstanceType" : "m4.2xlarge",
-         "KeyName" : "lab-keypair",
+         "InstanceType" : "m4.large",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.2.101",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetB" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServergem2101"
+              "Value" : "AirlineDemo2Servergem2101"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-07b3d5b50925457d9"
+            "VolumeId" : "vol-0f9284786dce0a48c"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-0ff52e2122fec836a"
+            "VolumeId" : "vol-0f5ed25bb570a968a"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-0378d2be1a2eff041"
+            "VolumeId" : "vol-0493738f4c977ff84"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -237,33 +237,33 @@
          "EbsOptimized" : true,
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
-         "InstanceType" : "m4.2xlarge",
-         "KeyName" : "lab-keypair",
+         "InstanceType" : "m4.large",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.3.101",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetC" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServergem3101"
+              "Value" : "AirlineDemo2Servergem3101"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-0846e56d94842404b"
+            "VolumeId" : "vol-0d44540b19063e2f1"
           }
 ,          {
             "Device" : "/dev/xvdg",
-            "VolumeId" : "vol-06a05d1607b7bb2f7"
+            "VolumeId" : "vol-007729ca99e8a95b3"
           }
 ,          {
             "Device" : "/dev/xvdh",
-            "VolumeId" : "vol-0152bc703825f62a2"
+            "VolumeId" : "vol-016b32b05ae2845be"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -277,25 +277,25 @@
          "EbsOptimized" : true,
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
-         "InstanceType" : "m4.2xlarge",
-         "KeyName" : "lab-keypair",
+         "InstanceType" : "m4.large",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.2.201",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetB" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServeretl2201"
+              "Value" : "AirlineDemo2Serveretl2201"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-091ac1e1f0b5a9791"
+            "VolumeId" : "vol-05e81338ac443bddf"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -309,25 +309,25 @@
          "EbsOptimized" : true,
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
-         "InstanceType" : "m4.2xlarge",
-         "KeyName" : "lab-keypair",
+         "InstanceType" : "m4.large",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.2.202",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetB" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServerweb2201"
+              "Value" : "AirlineDemo2Serverweb2201"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
           {
             "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-0d6ec4c78d61b0807"
+            "VolumeId" : "vol-01f5e136a1ed63d5f"
           }
          ] ,
          "BlockDeviceMappings" : [
@@ -342,30 +342,26 @@
          "ImageId" : "ami-0b33d91d",
          "InstanceInitiatedShutdownBehavior" : "stop",
          "InstanceType" : "t2.micro",
-         "KeyName" : "lab-keypair",
+         "KeyName" : "yak-keypair",
          "PrivateIpAddress" : "192.168.1.222",
          "SecurityGroupIds" : [ { "Ref" : "SecurityGroup"}],
          "SubnetId" : { "Ref" : "SubnetA" },
          "Tags" : [
             {
               "Key": "Name",
-              "Value" : "AirlineDemoServercontroller"
+              "Value" : "AirlineDemo2Servercontroller"
             },
             {
               "Key": "Environment",
-              "Value" : "AirlineDemo"
+              "Value" : "AirlineDemo2"
             }
           ],
          "Volumes" : [
-          {
-            "Device" : "/dev/xvdf",
-            "VolumeId" : "vol-08ae92b9134c3abd3"
-          }
          ] ,
          "BlockDeviceMappings" : [
          ]
       }
     }
   },
-  "Description": "AirlineDemo Stack"
+  "Description": "AirlineDemo2 Stack"
 }
