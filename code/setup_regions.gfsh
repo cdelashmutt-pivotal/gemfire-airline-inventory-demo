@@ -6,3 +6,7 @@ create region --name=Airport --type=REPLICATE_PERSISTENT_OVERFLOW --disk-store=a
 
 list regions
 
+deploy --jar=airline-inventory-common/target/airline-inventory-common-1.0-SNAPSHOT.jar
+deploy --jar=airline-inventory-server/target/airline-inventory-server-1.0-SNAPSHOT.jar
+
+list deployed

@@ -1,0 +1,5 @@
+create disk-store --name=pdxDiskStore --dir=data/pdx --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+
+configure pdx --read-serialized=true --disk-store=pdxDiskStore
+
+shutdown --include-locators=true
