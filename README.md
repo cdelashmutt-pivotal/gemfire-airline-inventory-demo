@@ -1,68 +1,63 @@
-# Overview #
-GemFire Ops Suite automates provisioning and management of
-a GemFire cluster on AWS or on bare metal.
+# Overview
 
-This document primarily describes the use of GemFire Ops Suite
-with AWS.
+This is a demonstration of an airline inventory system.  This project contains
+the configuration, etc. to
 
-GemFire Ops Suite relies on AWS Cloud Formation to configure AWS.
-It splits a cluster into two Cloud Formation stacks.  One stack contains
-all of the EBS volumes and the other contains the networking and
-compute elements.  This allows the costly EC2 instances to be deployed
-and undeployed as needed while preserving the data. This capability
-represents a significant cost saving for environments, such as development
-clusters,  that do not need to run 24x7 .
+# Setup
 
-# Setup #
-* The local machine requires python3 to be installed and the following python
-packages
- * jina2
- * boto3
- * awscli
-* You will need to register a key pair with AWS and you will need the
-corresponding .pem file on your local machine.
-* You will need an AWS AccessKeyId and SecretAccessKey. You can either use your
-master key (which is dicouraged by Amazon) or create an IAM user.  The IAM
-user you create will need to attach a user policy that grants access to all EC2, Cloud Formation and Elastic Load Balancing operations.  The following
-policy definition can be used.
+## GemFire
 
-    ```json
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": [
-                    "ec2:*",
-                    "cloudformation:*",
-                    "elasticloudbalancing:*"
-                ],
-                "Effect": "Allow",
-                "Resource": "*"
-            }
-        ]
-    }
-    ```
+This demo uses gemfire 9.0.4.  It should be installed on your local machine.
+You can get away with any 9.x version.
 
-__For detailed AWS setup instructions, see "AWS_Setup.docx"__
+## Python
 
-# Setting up an AWS Cluster #
-Configuring a cluster starts with a cluster configuration file like the
-one below.  Only the most basic information is provided in this file. All
-of the other configurations are provided by a set of templates called a
-"plan".  A plan is an opinionated approach to AWS deployment and GemFire
-cluster configuration.
+This project requires python3 for the AWS control scripts. In addition, the
+_boto3_  and _jinja2_ packages must be installed.
 
-Plans can be customized but that is not covered in this document.  
-Currently, GemFire Ops Suite comes with one plan, the "Default Plan".  The
-Default Plan is described in some detail below.
+## Maven
 
-Here is a sample cluster definition file for a 3 node cluster.
+The code for the demo is in the _code_ folder and it is a maven project.
+
+Unfortunately, some special setup is required to allow maven to download the
+GemFire jars. If you don't already have one, you'll need to create an account
+on _network.pivotal.io_.  Then edit _~/.m2/settings.xml_ (or create one) and
+include your _network.pivotal.io_ credentials in a server declaration (see the
+  example below)
+
+``` xml
+<settings>
+   <servers>
+       <server>
+           <id>gemfire-release-repo</id>
+           <username>me@myemail.com</username>
+           <password>mypassword</password>
+       </server>
+   </servers>
+</settings>
+```
+
+## AWS
+
+An AWS Account with the proper permissions is required and a key-pair must
+be configured as well.  See _gem-ops-suite/AWS_Setup.docx_ for step by step
+instructions.
+
+# Walk Through on AWS
+
+## Provision the AWS Environment
+
+Edit the cloud environment descriptor, _awscluster.json_.  Be sure to set the
+key pair name and location to the name and location of the key pair you set up
+in AWS.  You can also change the number of instances, types, sizes,
+availability zones, etc.  A minimal example is show below:
+
 ```
 {
-  "EnvironmentName" : "Test",
-  "RegionName" : "us-east-2",
-  "SSHKeyPairName" : "lab-keypair",
-  "SSHKeyPath": "/Users/me/Downloads/lab-keypair.pem",
+  "EnvironmentName" : "FiservGemFireLab",
+  "RegionName" : "us-east-1",      
+  "SSHKeyPairName" : "yak-keypair",                       <<< Set This
+  "SSHKeyPath": "/Users/rmay/Dowbloads/yak-keypair.pem",  <<< Set This
   "Servers" : [
     {
       "Name" : "gem1101",
@@ -72,159 +67,126 @@ Here is a sample cluster definition file for a 3 node cluster.
         "Roles" : ["DataNode", "Locator"]
     },
     {
-      "Name" : "gem2101",
-      "PrivateIP" : "192.168.2.101",
-      "AZ" : "B",
+      "Name" : "gem1102",
+      "PrivateIP" : "192.168.1.102",
+      "AZ" : "A",
       "InstanceType" : "m4.xlarge",
-      "Roles" : ["DataNode", "Locator"]
-    },
-    {
-      "Name" : "gem3101",
-      "PrivateIP" : "192.168.3.101",
-      "AZ" : "C",
-      "InstanceType" : "m4.xlarge",
-      "Roles" : ["DataNode", "Locator"]
+      "Roles" : ["DataNode"]
     }
   ]
 }
-
-```
-This file must be named "awscluster.json" and it must be in the "config"
-directory. Once you have created your awscluster.json, generate all of the
-configurations by running "generateAWSCluster.py".  You will need to read
-"Instance Types Supported by the Default Plan" and
-"Networking and the Default Plan" below to understand what options are
-supported.
-
-The setup steps are shown in concise form below:
-
-```
-cd ~/gem-ops-suite
-cp samples/awscluster.json config
-vi config/awscluster.json  #edit the cluster definition
-python3 generateCluster.py
 ```
 
-You now have a completely reproducible GemFire cluster on AWS.  The entire
-project can be checked in to source control to allow versioning of the cluster.
+You can now start the AWS environment. The scripts are idempotent.  If
+something goes wrong, fix the config file and repeat the  steps.  The setup
+step will take a while if you are running from a machine connected over wifi
+as it uploads artifacts directly from the local machine.
 
-# Scripts #
-
-- __aws_provision_storage.py__
-
-  Provisions the EBS volumes for your cluster.
-
-- __aws_destroy_storage.py__
-
-   Destroys the EBS volumes for your cluster.  __This will cause data loss.__
-
-- __aws_provision.py__
-
-  Provisions the networking and EC2 instances.
-
-- __setup.py__
-
-  Installs all software and configurations onto the EC2 instances.  Note it
-  is harmless to run this script multiple times.  Updates to GemFire cluster
-  configurations will be propagated each time this is run.
-
-- __gf.py start__
-
-  Starts the GemFire cluster
-
-- __gf.py bounce__
-
-  Performs a rolling bounce of the GemFire cluster.  Care is taken  
-  that redundancy is always established before members are stopped, thus
-  ensuring no data loss.
-
-- __gf.py gfsh list members__
-
-  Runs "gfsh list members" on a member of the cluster after connecting.
-
-- __gf.py gfsh shutdown --include-locators=true__
-
-  Stops all cluster members.
-
-## Script Examples ##
-
-### First Time Provisioning and Startup ###
 ```
-python3 aws_provision_storage.py
-python3 aws_provision.py
-python3 setup.py
-python3 gf.py start
+cp awscluster.json gem-ops-suite/config
+python gem-ops-suite/generateAWSCluster.py
+python gem-ops-suite/aws_provision_storage.py
+python gem-ops-suite/aws_provision.py
+python gem-ops-suite/setup.py
+python gem-ops-suite/gf.py start
 ```
 
-### End of Day Tear Down (Leaves Data Intact) ###
+You now have an AWS cluster installed and started.  Each time the cluster
+is provisioned, it will receive a new set of public IPs.  To see the latest IPs,
+review _gem-ops-suite/aws_runtime.json_.  You will need the IP address of a
+locator (usually gem1101) for the next step.
+
+``` json
+{
+   "gem1101": "54.227.117.144",  <<< locator ip address
+   "gem1102": "107.23.143.109"
+}
 ```
-python3 gf.py gfsh shutdown --include-locators=true
-python3 aws_destroy.py
+
+Check out the pulse admin ui at: 54.227.117.144:17070/pulse
+(use the correct IP for your locator). Log in with "admin"/"admin"
+
+## Initialize the Cluster and Load Data
+
+__In the commands below, be sure to substitute the correct locator ip for your cluster.__
+
+```
+cd code
+mvn install
+
+# this will update some configuration and stop the cluster because a restart is
+# needed after this config change
+gfsh -e "connect --locator=54.227.117.144[10000]" -e "run --file=cluster_init.gfsh"
+
+# start the cluster again
+python ../gem-ops-suite/gf.py start
+
+# continue with disk store and region setup
+gfsh -e "connect --locator=54.227.117.144[10000]" -e "run --file=setup_disk_stores.gfsh"
+gfsh -e "connect --locator=54.227.117.144[10000]" -e "run --file=setup_regions.gfsh"
+
+# now the cluster is initialized, load some data
+python loader.py --locator=54.227.117.144[10000]
 ```
 
-### Provision and Startup After First Time ###
+The cluster is now ready for use.  
+
+## Run the Application
+
+The UI is a standard WAR.  You can run the UI locally using the _jetty:run_
+target or deploy the war file (in _target_ directory) to an app server.  
+
+The web apps expects the following 2 system properties to be set:
+- gemfire.locator.host=54.227.117.144
+- gemfire.locator.port=10000
+
+To run the application locally, you can use a command like the following:
 ```
-python3 aws_provision.py
-python3 setup.py
-python3 gf.py start
+mvn jetty:run -Dgemfire.locator.host=54.227.117.144 -Dgemfire.locator.port=10000
 ```
 
-# The Default Plan #
+If you wish to create some external load (for example to demonstrate CQ), you
+can use the "loadgen" program as follows (run from the _code_ directory ):
+```
+python loadgen.py --locator=54.227.117.144[10000] --threads=2 --intervalms=500 --from-date=20170901 --to-date=20170907 --looktobook=4
+```
 
-This section describes how the default plan provisions AWS based on the
-cluster definition you provide (see example above).
+__Be sure to supply a date range that ends within one year of when the data
+was loaded.__
 
-## Instance Types Supported by the Default Plan ##
-The default plan supports only the following instance types:
+## Shut Down at the End of the Day
 
-| Instance Type | vCPU | Cores | RAM     |
-|---------------|------|-------|---------|
-| m4.large      |  2   |   1   |     8g  |
-| m4.xlarge     |  4   |   2   |    16g  |
-| m4.2xlarge    |  8   |   4   |    32g  |
-| m4.4xlarge    | 16   |   8   |    64g  |
+This procedure will stop the cluster and undeploy the ec2 instances but
+leave the data in tact.
 
-## Networking and the Default Plan ##
-A VPC is created, in the specified region (at the top of the file), to contain all of the machines. The VPC will have private IP addresses in the 192.168.\*.\* range. In the configuration file,  you must give each machine a private IP address in this range.
+```
+# stop the cluster
+gem-ops-suite/gf.py gfsh shutdown --include-locators=true
 
-The "AZ" setting is used to specify the AWS availability zone that the
-server will be provisioned in.  For example, if your "Region" setting
-is "us-east-1", a server that specifies "B" for it's "AZ" would be
-provisioned in the "us-east-1b" availability zone.  You can provision
-your servers across any of the availability zones that exist in the
-the region but there are some constraints on the private IP addresses
-available in each AZ.
+# unprovision ec2 instances
+python gem-ops-suite/aws_destroy.py
+```
 
-Within each AZ , a subnet will automatically be provisioned.  In the "A" availability zone, the subnet will be 192.168.__1__.\* , in the "B" availability zone, it will be 192.168.__2__.\* , etc..  The AZ you choose for an instance and its private IP address must be consistent.
+## Start the Cluster Again and Restore All Data
 
-## Storage and the Default Plan ##
-The default plan also configures storage automatically.  Storage is configured as a collection of EBS volumes that can outlive the instances that they are attached to.  The table below describes the storage scheme.
+```
+python  gem-ops-suite/aws_provision.py
+# it is sometimes necessary to wait a few seconds at this point
+# if setup fails with an rsync error just try again
+python  gem-ops-suite/setup.py
+python  gem-ops-suite/gf.py start
+```
+__Note that you will get new IP addresses.  Check gem-ops-suite/aws_runtime.json
+for the new ones __
 
-| Server Type | Volume Size | Mount Point | Type | Purpose                                   |
-| ------------|-------------|-------------|------|-------------------------------------------|
-| All         | 10G         | /runtime    | gp2  | software installs, work directories, logs |
-| Data Node   | 2 x RAM     | /data       | gp2  | gemfire disk stores                       |
-| Data Node   | 4 x RAM     | /backup     | gp2  | backups of gemfire disk stores            |
+## Shutdown and Clean Up All EC2 Instances
+```
+# stop the cluster
+gem-ops-suite/gf.py gfsh shutdown --include-locators=true
 
-## GemFire and the Default Plan ##
-The default plans installs GemFire version 9.0.1 and Oracle JDK 1.8.0_92
+# unprovision ec2 instances
+python gem-ops-suite/aws_destroy.py
 
-Each data node will have the following RAM allocated.
-
-|instance type |  RAM  | DataNode -Xmx | -Xmn     |  Effective Capacity |
-|--------------|-------|---------------|----------|---------------------|
-| m4.large     |  8g   |    5g         |  350m    |         3.9g        |
-| m4.xlarge    | 16g   |   12g         | 1500m    |         8.8g        |
-| m4.2xlarge   | 32g   |   27g         | 3250m    |        20.2g        |
-| m4.4xlarge   | 64g   |   56g         | 4350m    |        43.9g        |
-
-
-formula for reserve given size: =  x^2/4096 + x/16 + 1/2 (and 2 more G for locator)
-formula for -Xmn (in m) given -Xmx (in m): x/5 - x^2/500000 - 600
-
-
-## Known Issues and the Default Plan ##
-Currently, due to a GemFire issue which will be resolved in version 9.0.2,
-multiple locators are not supported.  Currently regardless of the cluster.json
-file, a single locator will be deployed on the machine having private IP
-address 192.168.1.101
+# remove the storage too
+python gem-ops-suite/aws_destroy_storage.py
+```
