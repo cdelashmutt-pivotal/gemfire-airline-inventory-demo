@@ -1,7 +1,7 @@
-create disk-store --name=revenueControlDiskStore --dir=data/revenueControl --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
-create disk-store --name=flightDiskStore --dir=data/flight --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
-create disk-store --name=flightAvailabilityDiskStore --dir=data/flightAvailability --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
-create disk-store --name=fareDiskStore --dir=data/fare --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
-create disk-store --name=airportDiskStore --dir=data/fare --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+create disk-store --name=revenueControlDiskStore --dir=/data/revenueControl --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+create disk-store --name=flightDiskStore --dir=/data/flight --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+create disk-store --name=flightAvailabilityDiskStore --dir=/data/flightAvailability --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+create disk-store --name=fareDiskStore --dir=/data/fare --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
+create disk-store --name=airportDiskStore --dir=/data/fare --allowForceCompaction=true --auto-compact=true --max-oplog-size=256
 
 list disk-stores
