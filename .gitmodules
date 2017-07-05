@@ -1,0 +1,3 @@
+[submodule "gem-ops-suite"]
+	path = gem-ops-suite
+	url = git@github.com:Pivotal-Data-Engineering/gem-ops-suite.git
