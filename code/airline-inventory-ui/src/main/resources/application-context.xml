@@ -11,10 +11,29 @@
 	<gfe:client-cache id="cache" pdx-read-serialized="false"
 		pool-name="pool" pdx-serializer-ref="pdxSerializer"  />
 
+	<!--
 	<gfe:pool id="pool" read-timeout="10000" subscription-enabled="true" subscription-redundancy="1">
 		<gfe:locator host="${gemfire.locator.host}" port="${gemfire.locator.port}" />
 	</gfe:pool>
+-->
 
+	<!-- To intercept the pool creation, and make sure we set things up properly, we have
+	to resort to this "uglier" method of creating a pool bean -->
+	<bean class="io.pivotal.pde.sample.airline.ui.support.SSLPoolFactoryBean" id="pool">
+		<property name="readTimeout" value="10000" />
+		<property name="subscriptionEnabled" value="true" />
+		<property name="subscriptionRedundancy" value="1" />
+		<property name="locators">
+			<list>
+				<bean class="org.springframework.data.gemfire.support.ConnectionEndpoint">
+					<constructor-arg index="0" value="${gemfire.locator.host}" />
+					<constructor-arg index="1" value="${gemfire.locator.port}" />
+				</bean>
+			</list>
+		</property>
+		<property name="trustedCert" value="${gemfire.locator.trustedCert:#{null}}" />
+		<property name="privateKey" value="${gemfire.locator.privateKey:#{null}}" />
+	</bean>
 
 	<gfe:client-region id="airportRegion" name="Airport" 
 		cache-ref="cache" pool-name="pool" shortcut="PROXY" />
